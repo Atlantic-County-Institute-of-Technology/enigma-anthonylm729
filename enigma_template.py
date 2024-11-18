@@ -11,8 +11,14 @@ alphabet = "abcdefghijklmnopqrstuvwxyz"
 
 # user inputs a message and selects a key (or random), the message is then translated using the cipher
 def encode_message():
-    pass
-
+    message = (input("Please input the message you would like to decode"))
+    key = int(input("Please input the key(leave blank for random)"))
+    if key == "":
+        key = random.randint(0,26)
+    for x in range(len(alphabet)):
+        encoded_message = message.index(0)
+        encoded_message = encoded_message % 26
+        print(encoded_message)
 # encodes a target file, similarly to encode_message, except now targeting a filename
 def encode_file():
     pass
