@@ -15,11 +15,12 @@ def encode_message():
     key = int(input("Please input the key(leave blank for random)"))
     if key == "":
         key = random.randint(0,26)
-    for x in range(len(alphabet)):
-        encoded_message = message.index(0)
-        encoded_message = encoded_message % 26
-        print(encoded_message)
-# encodes a target file, similarly to encode_message, except now targeting a filename
+    print(key)
+    for x in range(len(message)):
+        ordmessage = ord(message[x])
+        ordmessage = ordmessage + key
+        print(chr(ordmessage))
+    # encodes a target file, similarly to encode_message, except now targeting a filename
 def encode_file():
     pass
 
