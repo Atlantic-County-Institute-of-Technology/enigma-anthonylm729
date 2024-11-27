@@ -11,27 +11,92 @@ alphabet = "abcdefghijklmnopqrstuvwxyz"
 
 # user inputs a message and selects a key (or random), the message is then translated using the cipher
 def encode_message():
-    message = (input("Please input the message you would like to decode"))
-    key = int(input("Please input the key(leave blank for random)"))
-    if key == "":
-        key = random.randint(0,26)
-    print(key)
-    for x in range(len(message)):
-        ordmessage = ord(message[x])
-        ordmessage = ordmessage + key
-        print(chr(ordmessage))
+    message = input("Please input the message you would like to encode: ").lower()
+    key_input = input("Please input the key (leave blank for random): ")
+
+    # determines the key
+    if key_input.strip() == "":
+        key = random.randint(0, 25)
+        print(f"Random key generated: {key}")
+    else:
+        key = int(key_input)
+
+    # encode the message
+    encoded_message = ""
+    for char in message:
+        if char in alphabet:
+            index = (alphabet.index(char) + key) % len(alphabet)
+            encoded_message += alphabet[index]
+        else:
+            encoded_message += char  # other characters remain unchanged
+
+    print(f"Encoded message: {encoded_message}")
     # encodes a target file, similarly to encode_message, except now targeting a filename
 def encode_file():
-    pass
+    input_file = input("Enter the file name to encode: ")
+    output_file = input("Enter the output file name: ")
+    key_input = input("Please input the key (leave blank for random): ")
+
+    if key_input.strip() == "":
+        key = random.randint(0, 25)
+        print(f"Random key generated: {key}")
+    else:
+        key = int(key_input)
+
+    try:
+        with open(input_file, "r") as infile, open(output_file, "w") as outfile:
+            for line in infile:
+                encoded_line = ""
+                for char in line.lower():
+                    if char in alphabet:
+                        index = (alphabet.index(char) + key) % len(alphabet)
+                        encoded_line += alphabet[index]
+                    else:
+                        encoded_line += char
+                outfile.write(encoded_line)
+        print(f"File encoded successfully with key {key}. Output written to {output_file}.")
+    except FileNotFoundError:
+        print(f"Error: The file '{input_file}' was not found.")
+
 
 # decodes target file using a user-specified key. If key is unknown, a keypress should
 # call decode_unknown_key()
 def decode_file():
-    pass
+    input_file = input("Enter the file name to decode: ")
+    output_file = input("Enter the output file name: ")
+    key = int(input("Enter the key to decode: "))
+
+    try:
+        with open(input_file, "r") as infile, open(output_file, "w") as outfile:
+            for line in infile:
+                decoded_line = ""
+                for char in line.lower():
+                    if char in alphabet:
+                        index = (alphabet.index(char) - key) % len(alphabet)
+                        decoded_line += alphabet[index]
+                    else:
+                        decoded_line += char
+                outfile.write(decoded_line)
+        print(f"File decoded successfully. Output written to {output_file}.")
+    except FileNotFoundError:
+        print(f"Error: The file '{input_file}' was not found.")
 
 # runs if the key is unknown. If this is true, print out all possible decoding combinations.
 def decode_unknown_key(filename):
-   pass
+    try:
+        with open(filename, "r") as infile:
+            content = infile.read()
+            for key in range(len(alphabet)):
+                decoded_message = ""
+                for char in content.lower():
+                    if char in alphabet:
+                        index = (alphabet.index(char) - key) % len(alphabet)
+                        decoded_message += alphabet[index]
+                    else:
+                        decoded_message += char
+                print(f"Key {key}: {decoded_message}")
+    except FileNotFoundError:
+        print(f"Error: The file '{filename}' was not found.")
 
 
 # main method declaration
